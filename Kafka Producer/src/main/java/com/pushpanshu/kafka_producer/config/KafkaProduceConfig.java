@@ -15,8 +15,17 @@ public class KafkaProduceConfig {
 
     @Value("${this.project.topic}")
     private String topicName;
+
+//    @Value("${this.project.topic2}")
+//    private String topicName2;
     @Bean
     public NewTopic createTopic(){
-        return new NewTopic(topicName, 3, (short) 1);
+        return new NewTopic(topicName, 1, (short) 1);
     }
+
+//    @Bean
+//    public NewTopic createTopic2(){
+//        return new NewTopic(topicName2, 3, (short) 1);
+//    }
+
 }

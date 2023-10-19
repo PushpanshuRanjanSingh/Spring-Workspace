@@ -1,0 +1,24 @@
+this.project:
+  topic: "topic-from-config"
+  groupId: "kafka-groupId"
+  topic2: "topic-from-config-2"
+  groupId2: "kafka-groupId-2"
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          jackson:
+            deserialization:
+              trusted-packages: com.pushpanshu.kafka_consumer.model
+
+
+
+
+
+server:
+  port: 9192
+

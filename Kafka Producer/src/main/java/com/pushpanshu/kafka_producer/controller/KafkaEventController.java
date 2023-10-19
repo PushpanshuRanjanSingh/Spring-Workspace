@@ -1,23 +1,40 @@
 package com.pushpanshu.kafka_producer.controller;
 
-import com.pushpanshu.kafka_producer.service.KafkaService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pushpanshu.kafka_producer.model.Customer;
+import com.pushpanshu.kafka_producer.service.KafkaProducerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/kafka")
 public class KafkaEventController {
 
-    @Autowired
-    private KafkaService kafkaService;
+    private final KafkaProducerService kafkaProducerService;
 
-    @GetMapping("/send/{message}")
-    public ResponseEntity<?> sendMessageToKafkaTopic(@PathVariable String message) {
-        kafkaService.sendMessage(message);
-        return ResponseEntity.ok("Message sent to Kafka topic successfully!");
+    public KafkaEventController(KafkaProducerService kafkaProducerService) {
+        this.kafkaProducerService = kafkaProducerService;
+    }
+
+//    @GetMapping("/send/{message}")
+//    public ResponseEntity<?> sendMessageToKafkaTopic(@PathVariable String message) {
+//        try {
+//            for (int i = 0; i < 10000; i++) {
+//                kafkaProducerService.sendMessage("[" + i + "]: " + message);
+//            }
+//            return ResponseEntity.ok("Message sent to Kafka topic successfully!");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
+    @PostMapping("/send")
+    public ResponseEntity<?> sendMessageToKafkaTopic(@RequestBody Customer customer) {
+        try {
+            kafkaProducerService.sendCustomerEvent(customer);
+            return ResponseEntity.ok("Message sent to Kafka topic successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
